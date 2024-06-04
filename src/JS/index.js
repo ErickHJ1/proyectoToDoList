@@ -1,6 +1,7 @@
 // Inserte el código aquí
 const agregar = document.getElementById('agregar')
 
+const agrega = {
 agregar.addEventListener('click',(e) => {
     e.preventDefault()
     const input = document.getElementById('input');
@@ -10,14 +11,9 @@ agregar.addEventListener('click',(e) => {
         const nuevoParrafo = document.createElement('li');
         nuevoParrafo.textContent = texto;
         contenedor.appendChild(nuevoParrafo);
-        
         // Limpia el campo de entrada
         input.value = '';
     }
     
     }) 
-async function eliminar() {
-    let esperar = await agregar()
-    return console.log(agregar())
-}
-
+export{}

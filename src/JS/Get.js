@@ -1,4 +1,7 @@
-async function getFuncion(texto) {
+import { lista } from "./Agregar";
+import { borrarTarea } from "./index3";
+import { texto } from "./Agregar";
+export async function getFuncion() {
     const respuesta = await fetch('http://localhost:3000/api/task',{    
     method: "GET",
     headers: {
@@ -6,24 +9,28 @@ async function getFuncion(texto) {
     }
     })
 try {
-    let lista = await respuesta.json()
-    const tarea = document.createElement("h2")
-    const checkbox = document.createElement("input")
-    const p = document.createElement("label")
-    const borrar = document.createElement('button')
-    borrar.textContent = "Eliminar"
-    borrar.className = "botonBorrar"
-    checkbox.type = "checkbox"
-    checkbox.classList = "check"
-    p.innerHTML = element.tarea
-    lista.className = "tareas"
-    lista.appendChild("checkbox")
-    lista.appendChild('p')
-    li.appendChild(borrar)
-    borrar.addEventListener('click', () => {
-        alert("skibidi")
-        deleteData(element.id)
-    })
+   
+    let listar = await respuesta.json()
+    lista.innerHTML = ""
+    listar.forEach(element => {
+        const li = document.createElement("li")
+        const checkbox = document.createElement("input")
+        const p = document.createElement("p")
+        const borrar = document.createElement('button')
+        const borar = document.createElement('button')
+        borrar.textContent = "Eliminar"
+        borrar.className = "botonBorrar"
+        checkbox.type = "checkbox"
+        checkbox.classList = "check"
+        p.innerHTML = element.taskName
+        li.appendChild(checkbox)
+        li.appendChild(p)
+        li.appendChild(borrar)
+        lista.appendChild(li)
+        borrar.addEventListener('click', () => {
+            borrarTarea(element.id)
+        })//checkbox.checked = true
+    });
 
 } catch (error) {
     console.log(error)
@@ -32,3 +39,7 @@ try {
 }
 
 getFuncion()
+
+async function put() {
+    
+}

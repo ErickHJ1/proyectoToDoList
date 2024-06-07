@@ -1,6 +1,6 @@
 //index3.js
 
-async function borrarTarea(id) {
+export async function borrarTarea(id) {
     try {
         const response = await fetch (`http://localhost:3000/api/task/${id}`,{
             method: "DELETE"
@@ -16,4 +16,3 @@ async function borrarTarea(id) {
     }
 }
 
-export {borrarTarea}

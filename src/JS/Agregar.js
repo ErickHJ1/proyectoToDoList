@@ -2,10 +2,13 @@
 //Agregar.js
 import { borrarTarea } from "./index3";
 import { obtenerTareasDelServidor } from "./Tareas";
+import { getFuncion } from "./Get";
 // Obtiene los elementos del HTML
 const agregar = document.getElementById('agregar');
 const contenedor = document.getElementById('tablero');
 const contadorElemento = document.getElementById('contador');
+export const lista = document.getElementById('lista')
+export const texto = input.value.trim();
 
 // Contador de tareas completadas
 let contador = 0;
@@ -13,6 +16,34 @@ let contador = 0;
 // Agregar texto
 agregar.addEventListener('click', async (e) => {
     e.preventDefault();
+tomarTarea()
+});
+
+// Agrega el botón para eliminar
+function agregarBotonEliminar(liElement) {
+    const botonEliminar = document.createElement('button');
+    botonEliminar.textContent = 'Eliminar';
+    botonEliminar.addEventListener('click', () => {
+        borrarTarea()
+        contenedor.removeChild(liElement);
+        if (contador >0) {
+            contador--; // Resta 1 al contador cuando se hace clic en el botón "Eliminar"
+            contadorElemento.textContent = "Tareas Completadas: " + contador;
+        }
+    });
+
+    liElement.appendChild(botonEliminar);
+}
+
+window.addEventListener('load', async () => {
+obtenerTareasDelServidor()
+});
+
+input.addEventListener('keypress', async(evt) => {
+    if (evt.key === 'Enter') {
+   tomarTarea() }})
+async function tomarTarea() {
+    const traerFuncion = getFuncion(lista)
     const input = document.getElementById('input');
     const texto = input.value.trim();
 
@@ -51,24 +82,4 @@ agregar.addEventListener('click', async (e) => {
         }
         
     }
-});
-
-// Agrega el botón para eliminar
-function agregarBotonEliminar(liElement) {
-    const botonEliminar = document.createElement('button');
-    botonEliminar.textContent = 'Eliminar';
-    botonEliminar.addEventListener('click', () => {
-        contenedor.removeChild(liElement);
-        borrarTarea()
-        if (contador >0) {
-            contador--; // Resta 1 al contador cuando se hace clic en el botón "Eliminar"
-            contadorElemento.textContent = "Tareas Completadas: " + contador;
-        }
-    });
-
-    liElement.appendChild(botonEliminar);
 }
-
-window.addEventListener('load', async () => {
-obtenerTareasDelServidor()
-});

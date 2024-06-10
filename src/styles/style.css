@@ -1,0 +1,40 @@
+*{
+    padding-right: 20px;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+}
+
+label {
+    font-size: 25px;
+}
+#input{
+border-radius: 30px;
+}
+
+form {
+padding-bottom: 20px;
+margin-left: -18px;
+}
+
+#tablero {
+    border: 1px solid black;
+}
+
+#agregar {
+    border-radius: 30px;
+    border: none;
+    padding: 5px 10px;
+    background-color: blueviolet;
+    color: #ffff;
+}
+
+li {
+    border: solid 1px;
+    margin: 10px;
+    padding: 20px   ;
+}

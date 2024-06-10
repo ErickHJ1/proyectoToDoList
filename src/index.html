@@ -1,18 +1,23 @@
 <!DOCTYPE html>
-<html>
-
-<head>
-	<title>Ejemplo básico</title>
-	<meta charset="UTF-8" />
+<html lang="en">
+	<head>
+		<title>Ejemplo básico</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="/src/styles/style.css">
+		
 </head>
-
+<h1>Tareas por hacer</h1>
 <body>
-	<input id="nombre" type="text">
-	<button id="agregar">Agregar</button>
-	<section id="tablero">
-	</section>
-
+	<form>
+		<label for="input">Inserte la tarea a realizar:</label>
+		<input id="input" type="text">
+		<button type="button" id="agregar">Agregar</button>
+	</form>
+	<div id="tablero"><ul id="lista"></ul></div>
+	<div id="contador"></div>
+	
+	
+	<script src="/src/JS/Agregar.js" type="module"></script>
 </body>
-<script src="./index.js" type="module"></script>
-<link rel="stylesheet" href="/src/styles/style.css">
 </html>

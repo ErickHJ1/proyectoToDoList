@@ -3,12 +3,12 @@
 import { borrarTarea } from "./index3";
 import { obtenerTareasDelServidor } from "./Tareas";
 import { getFuncion } from "./Get";
+
 // Obtiene los elementos del HTML
 const agregar = document.getElementById('agregar');
 const contenedor = document.getElementById('tablero');
 const contadorElemento = document.getElementById('contador');
-export const lista = document.getElementById('lista')
-export const texto = input.value.trim();
+export const lista = document.getElementById('lista');
 
 // Contador de tareas completadas
 let contador = 0;
@@ -16,7 +16,7 @@ let contador = 0;
 // Agregar texto
 agregar.addEventListener('click', async (e) => {
     e.preventDefault();
-tomarTarea()
+    tomarTarea();
 });
 
 // Agrega el botón para eliminar
@@ -24,10 +24,10 @@ function agregarBotonEliminar(liElement) {
     const botonEliminar = document.createElement('button');
     botonEliminar.textContent = 'Eliminar';
     botonEliminar.addEventListener('click', () => {
-        borrarTarea()
+        borrarTarea();
         contenedor.removeChild(liElement);
-        if (contador >0) {
-            contador--; // Resta 1 al contador cuando se hace clic en el botón "Eliminar"
+        if (liElement.querySelector('input[type="checkbox"]').checked) {
+            contador--;
             contadorElemento.textContent = "Tareas Completadas: " + contador;
         }
     });
@@ -36,14 +36,17 @@ function agregarBotonEliminar(liElement) {
 }
 
 window.addEventListener('load', async () => {
-obtenerTareasDelServidor()
+    obtenerTareasDelServidor();
+    restaurarEstadoCheckbox(); // Restaurar estado de la casilla de verificación al cargar la página
 });
 
 input.addEventListener('keypress', async(evt) => {
     if (evt.key === 'Enter') {
-   tomarTarea() }})
+        tomarTarea();
+    }
+});
+
 async function tomarTarea() {
-    const traerFuncion = getFuncion(lista)
     const input = document.getElementById('input');
     const texto = input.value.trim();
 
@@ -54,7 +57,30 @@ async function tomarTarea() {
         // Agregar checkbox
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.addEventListener('change', () => {
+        checkbox.addEventListener('change', async () => {
+            try {
+                // Actualizar estado de la tarea en el servidor
+                const response = await fetch(`http://localhost:3000/api/task/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ completed: checkbox.checked })
+                });
+                if (!response.ok) {
+                    throw new Error('Error al actualizar el estado de la tarea');
+                }
+                // Actualizar contador si la tarea se marca como completada
+                if (checkbox.checked) {
+                    contador++;
+                } else {
+                    contador--;
+                }
+                contadorElemento.textContent = "Tareas Completadas: " + contador;
+                guardarEstadoCheckbox(texto, checkbox.checked); // Guardar estado de la casilla de verificación
+            } catch (error) {
+                console.error('Error al actualizar la tarea:', error);
+            }
         });
 
         nuevoParrafo.appendChild(checkbox);
@@ -80,6 +106,25 @@ async function tomarTarea() {
         } catch (error) {
             console.error('Error al enviar la tarea:', error);
         }
-        
     }
 }
+
+// Función para guardar el estado de la casilla de verificación en el almacenamiento local
+function guardarEstadoCheckbox(taskName, completed) {
+    const estadoTareas = JSON.parse(localStorage.getItem('estadoTareas')) || {};
+    estadoTareas[taskName] = completed;
+    localStorage.setItem('estadoTareas', JSON.stringify(estadoTareas));
+}
+
+// Función para restaurar el estado de la casilla de verificación al cargar la página
+function restaurarEstadoCheckbox() {
+    const estadoTareas = JSON.parse(localStorage.getItem('estadoTareas')) || {};
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        const taskName = checkbox.parentElement.textContent.trim();
+        if (estadoTareas[taskName]) {
+            checkbox.checked = true;
+        }
+    });
+}
+getFuncion()
